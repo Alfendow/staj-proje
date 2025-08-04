@@ -1,0 +1,74 @@
+<div class="container">
+  <div class="page-header">
+    <h2>Müşteri Listesi</h2>
+    <div class="arama-kutusu">
+      <input type="text" [(ngModel)]="aramaTckn" placeholder="TCKN ile ara..." maxlength="11" (input)="filtrele()" />
+    </div>
+  </div>
+
+  <div class="table-wrapper">
+    <table class="musteri-tablosu">
+        <thead>
+            <tr>
+                <th>Ad Soyad</th>
+                <th>TCKN</th>
+                <th>Telefon</th>
+                <th>Email</th>
+                <th>Hesap No</th>
+                <th class="islem-sutunu-baslik">İşlemler</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let m of filtrelenmisMusteriler">
+                <td>{{ m.ad }} {{ m.soyad }}</td>
+                <td>{{ m.tckn }}</td>
+                <td>{{ m.telefon}}</td>
+                <td>{{ m.email }}</td>
+                <td>{{ m.hesapNumarasi }}</td>
+                <td class="islem-sutunu">
+                    <button class="btn btn-goruntule" (click)="kredileriGoster(m)">Görüntüle</button>
+                    <ng-container *ngIf="authService.isAdmin()">
+                        <button [routerLink]="['/admin/musteri-guncelle', m.tckn]" class="btn btn-guncelle">Güncelle</button>
+                        <button class="btn btn-sil" (click)="sil(m.tckn)">Sil</button>
+                    </ng-container>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+  </div>
+  <p *ngIf="filtrelenmisMusteriler.length === 0">Müşteri bulunamadı.</p>
+</div>
+
+
+<div *ngIf="modalGoster" class="modal-overlay" (click)="modalKapat()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <button class="modal-close-button" (click)="modalKapat()">×</button>
+    <h3 *ngIf="seciliMusteri">{{ seciliMusteri.ad }} {{ seciliMusteri.soyad }} - Kayıtlı Kredi Planları</h3>
+    
+    <div *ngIf="seciliMusteriKredileri.length > 0; else noData" class="modal-table-container">
+        <table class="kredi-tablosu">
+            <thead>
+                <tr>
+                    <th>Kredi Türü</th>
+                    <th>Tutar</th>
+                    <th>Vade</th>
+                    <th>Toplam Ödeme</th>
+                    <th>Kayıt Tarihi</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let kredi of seciliMusteriKredileri">
+                    <td>{{ kredi.parsedIstek?.krediTuru | titlecase }}</td>
+                    <td>{{ kredi.parsedIstek?.tutar | currency:'TRY':'symbol-narrow' }}</td>
+                    <td>{{ kredi.parsedIstek?.vade }} Ay</td>
+                    <td>{{ kredi.parsedSonuc?.toplamOdeme | currency:'TRY':'symbol-narrow' }}</td>
+                    <td>{{ kredi.kayitTarihi | date:'dd.MM.yyyy HH:mm' }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <ng-template #noData>
+        <p>Bu müşteriye ait kayıtlı kredi planı bulunamadı.</p>
+    </ng-template>
+  </div>
+</div>

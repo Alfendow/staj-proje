@@ -1,0 +1,62 @@
+<div class="form-card">
+  <h2>{{ duzenlemeModu ? 'Müşteri Bilgilerini Güncelle' : 'Yeni Hesap Oluştur' }}</h2>
+
+  <form (ngSubmit)="kaydetVeyaGuncelle()" #form="ngForm">
+    
+    <div class="form-group">
+      <label>Ad:</label>
+      <input type="text" [(ngModel)]="musteri.ad" name="ad" required maxlength="50" />
+    </div>
+
+    <div class="form-group">
+      <label>Soyad:</label>
+      <input type="text" [(ngModel)]="musteri.soyad" name="soyad" required maxlength="50"/>
+    </div>
+
+    <div class="form-group">
+      <label>TCKN:</label>
+      <input type="text" 
+        [readonly]="duzenlemeModu" 
+        [(ngModel)]="musteri.tckn" 
+        name="tckn" required 
+        maxlength="11" 
+        pattern="^[0-9]*$"
+        (keypress)="sayiKontrol($event)"/>
+    </div>
+
+    <div class="form-group">
+      <label>Telefon:</label>
+      <input required type="tel" [(ngModel)]="musteri.telefon" 
+        name="telefon" 
+        placeholder="(5__) ___ __ __ " 
+        mask="(000) 000 00 00"
+        [dropSpecialCharacters]="true"/>
+    </div>
+
+    <div class="form-group">
+      <label>Email:</label>
+      <input required type="email" [(ngModel)]="musteri.email" name="email" maxlength="50"/>
+    </div>
+
+    <div class="form-group" *ngIf="!duzenlemeModu">
+      <label>Şifre:</label>
+      <input type="password" [(ngModel)]="musteri.sifre" name="sifre" required />
+    </div>
+
+    <div class="form-group" *ngIf="duzenlemeModu">
+      <label>Müşteri Şifresi (Değiştirilemez):</label>
+      <input type="password" [(ngModel)]="musteri.sifre" name="sifre" [readonly]="true" />
+    </div>
+
+    <button type="submit" [disabled]="form.invalid" class="submit-button">
+      {{ duzenlemeModu ? 'Bilgileri Güncelle' : 'Hesap Oluştur' }}
+    </button>
+  </form>
+
+  <p *ngIf="mesaj" class="mesaj">{{ mesaj }}</p>
+
+  <div class="bottom-link" *ngIf="!duzenlemeModu">
+    <span>Zaten bir hesabınız var mı? </span>
+    <a routerLink="/login">Giriş Yapın</a>
+  </div>
+</div>

@@ -1,0 +1,46 @@
+<div class="profil-kart" *ngIf="musteri">
+
+  <div class="profil-header">
+    <div class="avatar">{{ kullaniciBasHarfleri }}</div>
+    <h2>{{ musteri.ad }} {{ musteri.soyad }}</h2>
+    <p>{{ musteri.email }}</p>
+  </div>
+  
+  <div *ngIf="!isEditMode">
+    <div class="bilgi-bolumu">
+      <div class="bilgi-satiri">
+        <label>TC Kimlik Numarası:</label>
+        <span>{{ musteri.tckn }}</span>
+      </div>
+    <div class="bilgi-satiri">
+        <label>Hesap Numarası:</label>
+        <span>{{ musteri.hesapNumarasi }}</span>
+      </div>
+    </div>
+    <button (click)="duzenlemeyiAc()" class="btn btn-primary">Bilgileri Düzenle</button>
+  </div>
+
+  <div *ngIf="isEditMode">
+    <form (ngSubmit)="bilgileriGuncelle()" #profilForm="ngForm">
+      <div class="form-group">
+        <label>Telefon:</label>
+        <input type="tel" [(ngModel)]="musteri.telefon" name="telefon" required mask="(000) 000 00 00" [dropSpecialCharacters]="true">
+      </div>
+      <div class="form-group">
+        <label>Email:</label>
+        <input type="email" [(ngModel)]="musteri.email" name="email" required>
+      </div>
+      <div class="form-group">
+        <label>Yeni Şifre (Değiştirmeyecekseniz boş bırakın):</label>
+        <input type="password" [(ngModel)]="musteri.sifre" name="sifre">
+      </div>
+      
+      <div class="buton-grubu">
+        <button type="submit" [disabled]="profilForm.invalid" class="btn btn-primary">Değişiklikleri Kaydet</button>
+        <button type="button" (click)="iptalEt()" class="btn btn-secondary">İptal</button>
+      </div>
+    </form>
+  </div>
+
+  <p *ngIf="mesaj" class="mesaj-success">{{ mesaj }}</p>
+</div>

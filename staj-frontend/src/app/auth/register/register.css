@@ -1,0 +1,108 @@
+:host {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  min-height: 90vh;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.form-card {
+  width: 100%;
+  max-width: 500px;
+  padding: 20px 40px;
+  border-radius: 8px;
+  box-shadow: 0 5px 25px rgba(0, 0, 0, 0.1);
+  border-top: 5px solid #ffbc14; 
+}
+
+h2 {
+  text-align: center;
+  margin-top: 0;
+  margin-bottom: 10px;
+  color: #212529;
+  font-weight: 600;
+}
+
+.form-group {
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 500;
+  color: #495057;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 10px;
+  border: 2px solid #ced4da;
+  border-radius: 6px;
+  box-sizing: border-box;
+  transition: all 0.2s ease-in-out;
+}
+
+.form-group input:focus {
+  outline: none;
+  border: 2px solid #ffbc14; 
+}
+
+.form-group input[readonly] {
+    background-color: #e9ecef;
+    cursor: not-allowed;
+}
+
+.submit-button {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 6px;
+  /* DÜZELTME: Buton yeşil yerine sarı oldu */
+  background-color: #ffbc14;
+  color: #212529; /* Sarıya en iyi giden renk */
+  font-size: 1.1rem;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: background-color 0.2s;
+}
+
+.submit-button:disabled {
+  background-color: #e9ecef;
+  color: #6c757d;
+  cursor: not-allowed;
+}
+
+.submit-button:not(:disabled):hover {
+  /* DÜZELTME: Hover rengi sarının koyu tonu oldu */
+  background-color: #e0a810;
+}
+
+/* Mesaj ve link stilleri aynı kalabilir, renkleri evrenseldir */
+.mesaj {
+  color: #28a745; /* Başarı mesajları genellikle yeşil kalır */
+  text-align: center;
+  margin-top: 15px;
+  font-weight: 500;
+}
+
+.bottom-link, .login-link {
+  text-align: center;
+  margin-top: 25px;
+  padding-top: 20px;
+  border-top: 1px solid #e9ecef;
+  font-size: 0.9rem;
+}
+
+.bottom-link a, .login-link a {
+  font-weight: 500;
+  color: #007bff;
+  text-decoration: none;
+}
+.bottom-link a:hover, .login-link a:hover {
+  text-decoration: underline;
+}

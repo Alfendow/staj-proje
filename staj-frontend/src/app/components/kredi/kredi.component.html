@@ -1,0 +1,123 @@
+
+    <div class="form-dikey">
+    <h2 class="baslik">Kredi Hesaplama</h2>
+    <div class="form">
+      <div class="form-group">
+        <label>Tutar:</label>
+        <input type="number" [(ngModel)]="istek.tutar" />
+      </div>
+      <div class="form-group">
+        <label>Vade (Ay):</label>
+        <input type="number" [(ngModel)]="istek.vade" />
+      </div>
+      <div class="form-group">
+        <label>Aylık Faiz Oranı (%):</label>
+        <input type="number" [(ngModel)]="istek.aylikOran" />
+      </div>
+      <div class="form-group">
+        <label>Kredi Türü:</label>
+        <select [(ngModel)]="istek.krediTuru">
+          <option value="konut">Konut</option>
+          <option value="ihtiyac">İhtiyaç</option>
+          <option value="tasit">Taşıt</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Ödeme Sıklığı:</label>
+        <select [(ngModel)]="istek.odemeSikligi">
+          <option value="bir">Her Ay</option>
+          <option value="uc">3 Ayda Bir</option>
+          <option value="alti">6 Ayda Bir</option>
+        </select>
+      </div>  
+    </div>
+  </div>
+    
+    <div class="buton-grup">
+      <button (click)="hesapla()" class="btn">{{ seciliKayitId ? 'Değişiklikleri Hesapla' : 'Hesapla' }}</button>
+      <button *ngIf="sonuc && !seciliKayitId" (click)="planiKaydet()" class="btn">Planı Kaydet</button>
+      <div *ngIf="seciliKayitId">
+        <button (click)="guncellemeyiKaydet()" class="btn">Güncellemeyi Kaydet</button>
+        <button (click)="yeniHesaplamayaBasla()" class="btn">İptal Et</button>
+      </div>
+    </div>
+
+  <div *ngIf="sonuc && sonuc.taksitDetaylari.length > 0" class="kart">
+    <h2 class="kredi-baslik">Kredi Tablosu</h2>
+    <div class="table-wrapper">
+      <table class="taksit-tablosu">
+        <thead>
+          <tr>
+            <th>Taksit No</th>
+            <th>Ödeme Tarihi</th>
+            <th>Atla</th>
+            <th>Sabit Taksit</th>
+            <th>Ara Ödeme</th>
+            <th>Artış</th>
+            <th>Tip</th>
+            <th class="taksit-sutunu">Taksit Tutarı</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let detay of sonuc.taksitDetaylari; let i = index">
+            <td>{{ i + 1 }}</td>
+            <td>{{ detay.odemeTarihi | date:'dd.MM.yyyy' }}</td>
+            <td>
+              <label class="custom-checkbox">
+                <input type="checkbox" [(ngModel)]="istek.aylikVeriler[detay.ay - 1].atlandiMi" />
+                <span class="checkmark"></span>
+              </label>
+            </td>
+            <td><input type="number" [(ngModel)]="istek.aylikVeriler[detay.ay - 1].sabitTaksit" /></td>
+            <td><input type="number" [(ngModel)]="istek.aylikVeriler[detay.ay - 1].araOdeme" /></td>
+            <td><input type="number" [(ngModel)]="istek.aylikVeriler[detay.ay - 1].artis" /></td>
+            <td>
+              <select [(ngModel)]="istek.aylikVeriler[detay.ay - 1].artisTipi">
+                <option value="">TL</option>
+                <option value="yuzde">Yüzde</option>
+              </select>
+            </td>
+            <td class="taksit-sutunu">{{ detay.toplamTaksit | currency:'TRY':'symbol-narrow':'1.2-2' }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="toplam-odeme">
+      <h3>Toplam Geri Ödeme: {{ sonuc.toplamOdeme | currency:'TRY':'symbol-narrow':'1.2-2' }}</h3>
+      <button (click)="exportToCsv()" class="btn export">CSV İndir</button>
+    </div>
+  </div>
+
+
+
+
+  <div *ngIf="kayitliKrediler.length > 0" class="kayitli-kart">
+    <h2>Kaydedilen Kredi Planlarım</h2>
+    <div class="table-wrapper">
+      <table class="taksit-tablosu">
+        <thead>
+          <tr>
+            <th>Kredi Türü</th>
+            <th>Tutar</th>
+            <th>Vade</th>
+            <th>Toplam Ödeme</th>
+            <th>Kayıt Tarihi</th>
+            <th>İşlemler</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let kredi of kayitliKrediler">
+            <td>{{ kredi.parsedIstek?.krediTuru | titlecase }}</td>
+            <td>{{ kredi.parsedIstek?.tutar | currency:'TRY':'symbol-narrow' }}</td>
+            <td>{{ kredi.parsedIstek?.vade }} Ay</td>
+            <td>{{ kredi.parsedSonuc?.toplamOdeme | currency:'TRY':'symbol-narrow' }}</td>
+            <td>{{ kredi.kayitTarihi | date:'dd.MM.yyyy HH:mm' }}</td>
+            <td class="islem-butonlari">
+              <button (click)="planiYukle(kredi)" class="btn btn-secondary btn-sm">Yükle</button>
+              <button (click)="planiSil(kredi.id)" class="btn btn-tertiary btn-sm">Sil</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>

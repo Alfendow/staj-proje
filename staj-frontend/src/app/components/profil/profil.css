@@ -1,0 +1,139 @@
+:host {
+  display: flex;
+  justify-content: center;
+  padding: 40px 20px;
+  box-sizing: border-box;
+}
+
+.profil-kart {
+  width: 100%;
+  max-width: 500px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 5px 25px rgba(0, 0, 0, 0.08);
+  padding: 80px;
+}
+
+/* Avatar ve İsim Bölümü */
+.profil-header {
+  text-align: center;
+  margin-bottom: 40px;
+  border-bottom: 1px solid #e9ecef;
+  padding-bottom: 30px;
+}
+
+.avatar {
+  width: 100px;
+  height: 100px;
+  line-height: 100px;
+  border-radius: 50%;
+  background-color: #ffbc14;
+  color: #212529;
+  font-size: 2.5rem;
+  font-weight: 600;
+  margin: 0 auto 15px auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.profil-header h2 {
+  margin: 0 0 5px 0;
+  font-size: 1.8rem;
+}
+
+.profil-header p {
+  margin: 0;
+  color: #6c757d;
+  font-size: 1.1rem;
+}
+
+/* Görüntüleme Modu */
+.bilgi-satiri {
+  display: flex;
+  justify-content: space-between;
+  padding: 15px 5px;
+  border-bottom: 1px solid #f0f0f0;
+}
+.bilgi-satiri:last-child {
+  border-bottom: none;
+}
+.bilgi-satiri label {
+  font-weight: 500;
+  color: #6c757d;
+}
+.bilgi-satiri span {
+  font-weight: 500;
+  color: #212529;
+}
+
+/* Düzenleme Formu */
+.form-aciklama {
+  text-align: center;
+  padding: 10px;
+  background: #f8f9fa;
+  border-radius: 6px;
+  font-size: 0.9rem;
+}
+
+.form-group label {
+  font-weight: 500;
+  display: block;
+  margin:10px;
+}
+.form-group input {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ced4da;
+  border-radius: 6px;
+  font-size: 1rem;
+  box-sizing: border-box;
+  margin-bottom: 10px;
+}
+
+
+/* Butonlar */
+button {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-top: 10px;
+}
+.btn.btn-primary, .submit-button {
+  background-color: #ffbc14;
+  color: #212529;
+}
+.btn-primary:hover, .submit-button:hover {
+  background-color: #e0a810;
+}
+.buton-grubu {
+  display: flex;
+  gap: 15px;
+  margin-top: 30px;
+}
+
+.btn.btn-secondary, .cancel-button {
+  background-color: #6c757d;
+  color: white;
+}
+.btn-secondary:hover, .cancel-button:hover {
+  background-color: #5a6268;
+}
+
+
+
+
+.mesaj {
+  text-align: center;
+  margin-top: 20px;
+  font-weight: 500;
+  padding: 12px;
+  border-radius: 6px;
+  color: #28a745;
+  background-color: #e9f7ec;
+}

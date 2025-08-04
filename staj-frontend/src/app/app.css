@@ -1,0 +1,93 @@
+header {
+  padding: 20px 30px;
+  background-color: #ffffff;
+  border-bottom: 4px solid #ffbc14;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: -8px;
+}
+
+.logo-link {
+  display: inline-block;
+  cursor: pointer;
+  transition: all 0.1s linear;
+}
+
+.logo-link:hover {
+  transform: scale(1.05);
+  transition: all 0.1s linear;
+}
+
+/* DÜZELTME: SVG için net bir yükseklik ve genişlik veriyoruz */
+.logo-link svg {
+  height: 34px;
+  width: auto;
+  display: block; 
+}
+
+.main-nav {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+
+.nav-button {
+  border: 3px solid #ffbc14;
+  color: #000000;
+  padding: 8px 18px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.2s;
+  cursor: pointer;
+  font-size: 1rem;
+  white-space: nowrap;
+}
+
+.nav-button:hover {
+  opacity: 0.9;
+  transform: translateY(-2px);
+  background-color: #ffbc14;
+}
+
+main {
+  padding: 20px;
+}
+
+.logout-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.95); 
+  z-index: 9999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.logout-message h1 {
+  font-size: 2.5rem;
+  color: #212529;
+  margin-bottom: 10px;
+}
+
+.logout-message p {
+  font-size: 1.2rem;
+  color: #6c757d;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+p{
+  font-size: 16px;
+  font-weight: bold;
+}

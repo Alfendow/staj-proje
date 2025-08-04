@@ -18,29 +18,30 @@ Write-Host "                    STAJ ortamı başlatılıyor... Lütfen bekleyin
 Start-Sleep 2
 
 
+
+
 # Workspace 3
 glazewm command focus --workspace 3
 
+# API terminali
+Start-Process wt -ArgumentList '-d "C:\Users\Alfendow\Documents\staj-proje\stajapi" pwsh -NoExit -Command dotnet run'
 
-# glazewm betiğinizin içindeki WezTerm başlatma komutu
+Start-sleep 2
 
-# WezTerm'i başlat ve ona özel 'launch_staj_project=true' ayarını gönder.
-# wezterm.lua bu ayarı yakalayıp projeyi kuracak.
-Start-Process wezterm-gui -ArgumentList "start --always-new-process --config launch_staj_project=true"
-	
-	
-	
-	
+# Frontend terminali
+Start-Process wt -ArgumentList '-d "C:\Users\Alfendow\Documents\staj-proje\staj-frontend" pwsh -NoExit -Command ng serve'
+
+
 Start-Sleep 8
 
 # Workspace 2
-#glazewm command focus --workspace 2
-#Start-Process code -ArgumentList 'C:\Users\Alfendow\Documents\staj-proje' -WindowStyle Hidden
+glazewm command focus --workspace 2
+Start-Process code -ArgumentList 'C:\Users\Alfendow\Documents\staj-proje' -WindowStyle Hidden
 
 
 Start-Sleep 4
 
 # Workspace 1
-#glazewm command focus --workspace 1
-#Start-Process "http://localhost:5141/swagger/index.html"
-#Start-Process "http://localhost:4200/"
+glazewm command focus --workspace 1
+Start-Process "http://localhost:5141/swagger/index.html"
+Start-Process "http://localhost:4200/"

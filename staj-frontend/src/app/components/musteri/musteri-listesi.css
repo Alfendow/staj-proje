@@ -1,0 +1,117 @@
+.container {
+  max-width: 1200px; 
+  margin: 20px auto;
+  padding: 20px;
+}
+
+h2 {
+  text-align: center; 
+  color: #000000;
+  margin-bottom: 40px;
+}
+
+.arama-kutusu {
+  text-align: right;
+  margin-bottom: 10px;
+}
+
+.arama-kutusu input {
+  padding: 8px 12px;
+  border: 2px solid #ffbc14; /* Sarı border */
+  border-radius: 6px;
+  width: 250px;
+  font-size: 1rem;
+}
+
+.arama-kutusu input:focus {
+outline: none;
+}
+
+/* Tabloyu saran ve gölge veren ana kutu */
+.table-wrapper {
+    background: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    overflow-x: auto; /* Küçük ekranlar için kaydırma */
+}
+
+.musteri-tablosu {
+  width: 100%; 
+  border-collapse: collapse;
+}
+
+/* Orijinal tablo stilinize geri dönüyoruz */
+.musteri-tablosu th,
+.musteri-tablosu td {
+  padding: 12px;
+  text-align: center;
+    border: 1px solid #000000
+}
+
+.musteri-tablosu th {
+  background-color: #ffbc14; /* Beğendiğiniz sarı başlık */
+  font-weight: bold;
+  color: #000000;
+  text-transform: uppercase; 
+  font-size: 1rem;
+}
+
+
+.islem-sutunu {
+  display:flexbox;
+  gap: 20px;
+}
+
+/* Tüm butonlar için ortak temel stil (Kod tekrarını önler) */
+.btn {
+  font-family: 'Segoe UI';
+  padding: 6px 12px;
+  margin: 0 2px;
+  border-radius: 5px;
+  cursor: pointer;
+  border: 2px solid transparent;
+  font-weight: 600;
+  background-color: #ffffff;
+  text-decoration: none;
+  display: inline-block;
+  transition: all 0.2s ease-in-out;
+}
+
+/* Farklı renkler için sadece renkleri değiştiren sınıflar (DEĞİŞKEN KULLANILMADI) */
+.btn-goruntule { border-color: #28a745; color: #28a745; }
+.btn-guncelle { border-color: #007bff; color: #007bff; }
+.btn-sil { border-color: #dc3545; color: #dc3545; }
+
+/* Ortak hover (üzerine gelme) efekti */
+.btn-goruntule:hover { background-color: #28a745; color: #ffffff; }
+.btn-guncelle:hover { background-color: #007bff; color: #ffffff; }
+.btn-sil:hover { background-color: #dc3545; color: #ffffff; }
+
+/* "Müşteri bulunamadı" yazısı */
+p {
+  text-align: center;
+  margin-top: 30px;
+  font-style: italic;
+  color: #777;
+}
+
+.modal-content .kredi-tablosu {
+  width: 50%; 
+  margin-left: auto;
+  margin-right: auto;
+  border-collapse: collapse;
+}
+
+.modal-content .kredi-tablosu th,
+.modal-content .kredi-tablosu td {
+  padding: 10px 0px;
+  text-align: center;
+  border: 1px solid #000000;
+}
+
+/* Tablo Başlığı */
+.modal-content .kredi-tablosu th {
+  background-color: #ffbc14; 
+  font-weight: 600;
+  color: #000000; 
+}

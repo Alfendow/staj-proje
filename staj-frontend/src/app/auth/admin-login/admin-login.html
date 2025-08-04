@@ -1,0 +1,18 @@
+<div class="form-card">
+  <h2>Yetkili Girişi</h2>
+  <form (ngSubmit)="login()" #adminLoginForm="ngForm">
+    <div class="form-group">
+      <label for="email">Email:</label>
+      <input type="email" id="email" [(ngModel)]="credentials.email" name="email" required>
+    </div>
+    <div class="form-group">
+      <label for="sifre">Şifre:</label>
+      <input type="password" id="sifre" [(ngModel)]="credentials.sifre" name="sifre" required>
+    </div>
+    <p *ngIf="errorMessage" class="error-message">{{ errorMessage }}</p>
+    <button type="submit" [disabled]="adminLoginForm.invalid" class="submit-button">Giriş Yap</button>
+  </form>
+  <div class="bottom-link">
+    <a routerLink="/login">Müşteri Girişine Dön</a>
+  </div>
+</div>

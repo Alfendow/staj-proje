@@ -1,0 +1,19 @@
+<div class="form-card">
+  <h2>Müşteri Girişi</h2>
+  <form (ngSubmit)="login()" #loginForm="ngForm">
+    <div class="form-group">
+      <label>Email:</label>
+      <input type="email" [(ngModel)]="credentials.email" name="email" required>
+    </div>
+    <div class="form-group">
+      <label>Şifre:</label>
+      <input type="password" [(ngModel)]="credentials.sifre" name="sifre" required>
+    </div>
+    <p *ngIf="errorMessage" class="error-message">{{ errorMessage }}</p>
+    <button type="submit" [disabled]="loginForm.invalid" class="submit-button">Giriş Yap</button>
+  </form>
+  <div class="bottom-links">
+    <a routerLink="/register">Yeni Hesap Oluştur</a>
+    <a routerLink="/admin-login">Yetkili Girişi</a>
+  </div>
+</div>
