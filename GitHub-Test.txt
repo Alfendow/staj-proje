@@ -1,0 +1,1 @@
+Bu dosya, yerel bir değişikliğin GitHub'a nasıl aktarıldığını test etmek için oluşturulmuştur.
