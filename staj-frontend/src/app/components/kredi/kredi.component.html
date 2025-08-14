@@ -29,10 +29,10 @@
           <option value="uc">3 Ayda Bir</option>
           <option value="alti">6 Ayda Bir</option>
         </select>
-      </div>  
+      </div>
     </div>
   </div>
-    
+
     <div class="buton-grup">
       <button (click)="hesapla()" class="btn">{{ seciliKayitId ? 'Değişiklikleri Hesapla' : 'Hesapla' }}</button>
       <button *ngIf="sonuc && !seciliKayitId" (click)="planiKaydet()" class="btn">Planı Kaydet</button>
@@ -55,7 +55,14 @@
             <th>Ara Ödeme</th>
             <th>Artış</th>
             <th>Tip</th>
-            <th class="taksit-sutunu">Taksit Tutarı</th>
+            <th class="taksit-sutunu">
+              Taksit Tutarı
+              <div class="para-birimi-butonlar">
+                <button [class.active]="dovizCinsi === 'TRY'" (click)="paraBirimiDegistir('TRY')">₺</button>
+                <button [class.active]="dovizCinsi === 'USD'" (click)="paraBirimiDegistir('USD')">$</button>
+                <button [class.active]="dovizCinsi === 'EUR'" (click)="paraBirimiDegistir('EUR')">€</button>
+              </div>
+            </th>
           </tr>
         </thead>
         <tbody>
@@ -73,18 +80,21 @@
             <td><input type="number" [(ngModel)]="istek.aylikVeriler[detay.ay - 1].artis" /></td>
             <td>
               <select [(ngModel)]="istek.aylikVeriler[detay.ay - 1].artisTipi">
-                <option value="">TL</option>
+                <option value="">Miktar</option>
                 <option value="yuzde">Yüzde</option>
               </select>
             </td>
-            <td class="taksit-sutunu">{{ detay.toplamTaksit | currency:'TRY':'symbol-narrow':'1.2-2' }}</td>
+            <td class="taksit-sutunu">{{ getTaksitTutari(i) | currency:dovizCinsi:'symbol-narrow':'1.2-2' }}</td>
           </tr>
         </tbody>
       </table>
     </div>
     <div class="toplam-odeme">
-      <h3>Toplam Geri Ödeme: {{ sonuc.toplamOdeme | currency:'TRY':'symbol-narrow':'1.2-2' }}</h3>
-      <button (click)="exportToCsv()" class="btn export">CSV İndir</button>
+      <h3>Toplam Geri Ödeme: {{ getToplamOdeme() | currency:dovizCinsi:'symbol-narrow':'1.2-2' }}</h3>
+      <div class="export-buttons">
+        <button (click)="exportToCsv()" class="btn export">CSV İndir</button>
+        <button (click)="exportToPdf()" class="btn export">PDF İndir</button>
+      </div>
     </div>
   </div>
 

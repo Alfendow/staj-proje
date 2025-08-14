@@ -3,10 +3,13 @@ import { CommonModule, DatePipe, CurrencyPipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { KrediService } from '../../services/kredi.service';
 import { AuthService } from '../../services/auth.service';
+import { ExchangeService } from '../../services/exchange.service';
 import { KrediSonuc } from '../../models/kredi-sonuc.model';
 import { KrediIstek } from '../../models/kredi-istek.model';
 import { KayitliKredi } from '../../models/kayitli-kredi.model';
 import { Musteri } from '../../models/musteri';
+import pdfMake from "pdfmake/build/pdfmake";
+import pdfFonts from "pdfmake/build/vfs_fonts";
 
 @Component({
   selector: 'app-kredi',
@@ -28,6 +31,11 @@ export class KrediComponent implements OnInit {
   };
   sonuc: KrediSonuc | null = null;
   aktifKullanici: Musteri | null = null;
+  dovizCinsi: 'TRY' | 'USD' | 'EUR' = 'TRY';
+  convertedTaksitler: { [key: string]: number[] } = {
+    'USD': [],
+    'EUR': []
+  };
   kayitliKrediler: KayitliKredi[] = [];
   seciliKayitId: number | null = null;
   mesaj: string = '';
@@ -35,6 +43,7 @@ export class KrediComponent implements OnInit {
   constructor(
     private krediService: KrediService,
     private authService: AuthService,
+    private exchangeService: ExchangeService,
     private datePipe: DatePipe,
     private currencyPipe: CurrencyPipe
   ) {}
@@ -57,13 +66,12 @@ export class KrediComponent implements OnInit {
       });
     }
   }
-  
+
   hesapla(): void {
     if (!this.istek.vade || this.istek.vade <= 0) {
       alert('Lütfen geçerli bir vade giriniz.');
       return;
     }
-  
     if (this.istek.aylikVeriler.length !== this.istek.vade) {
       const mevcutVeriler = [...this.istek.aylikVeriler];
       this.istek.aylikVeriler = [];
@@ -74,14 +82,54 @@ export class KrediComponent implements OnInit {
         });
       }
     }
-    
+
     this.krediService.hesapla(this.istek).subscribe({
         next: (res) => {
           this.sonuc = res;
-          this.mesaj = 'Hesaplama sonucu güncellendi. Değişiklikleri kaydetmek için ilgili "Kaydet" butonunu kullanın.';
+          // Mevcut para birimini koru
+          const currentCurrency = this.dovizCinsi;
+          this.convertedTaksitler = { 'USD': [], 'EUR': [] };
+          this.hesaplaDovizKarsiligi();
+          if (currentCurrency !== 'TRY') {
+            // Hesaplama bittikten sonra önceki para birimine geri dön
+            this.paraBirimiDegistir(currentCurrency);
+          }
+          this.mesaj = 'Hesaplama sonucu güncellendi. Değişiklikleri kaydetmek için "Kaydet" butonunu kullanın.';
         },
         error: (err) => this.mesaj = 'Hesaplama sırasında hata oluştu.'
     });
+  }
+
+  hesaplaDovizKarsiligi(): void {
+    if (!this.sonuc) return;
+
+    ['USD', 'EUR'].forEach(currency => {
+      this.convertedTaksitler[currency] = [];
+      this.sonuc!.taksitDetaylari.forEach(taksit => {
+        this.exchangeService.convertAmount(taksit.toplamTaksit!, 'TRY', currency)
+          .subscribe(amount => {
+            this.convertedTaksitler[currency].push(amount);
+          });
+      });
+    });
+  }
+
+  paraBirimiDegistir(birim: 'TRY' | 'USD' | 'EUR'): void {
+    this.dovizCinsi = birim;
+  }
+
+  getTaksitTutari(index: number): number {
+    if (this.dovizCinsi === 'TRY') {
+      return this.sonuc!.taksitDetaylari[index].toplamTaksit!;
+    }
+    return this.convertedTaksitler[this.dovizCinsi][index] || 0;
+  }
+
+  getToplamOdeme(): number {
+    if (this.dovizCinsi === 'TRY') {
+      return this.sonuc!.toplamOdeme;
+    }
+    return this.convertedTaksitler[this.dovizCinsi].reduce((acc, curr) => acc + curr, 0);
   }
 
   planiKaydet(): void {
@@ -102,13 +150,13 @@ export class KrediComponent implements OnInit {
       error: (err) => this.mesaj = 'Kaydetme sırasında bir hata oluştu.'
     });
   }
-  
+
   guncellemeyiKaydet(): void {
     if (!this.seciliKayitId) return;
 
     this.krediService.hesapla(this.istek).subscribe(guncelSonuc => {
         this.sonuc = guncelSonuc;
-        
+
         this.krediService.guncelleKredi(this.seciliKayitId!, this.istek).subscribe({
           next: () => {
             this.mesaj = 'Kredi planı başarıyla güncellendi.';
@@ -149,15 +197,158 @@ export class KrediComponent implements OnInit {
   yeniHesaplamayaBasla(): void {
       this.istek = {
         krediTuru: 'konut', tutar: 0, vade: 0, aylikOran: 0, odemeSikligi: 'bir', aylikVeriler: [],
-      };
+      }
       this.sonuc = null;
       this.seciliKayitId = null;
       this.mesaj = '';
   }
 
 
-  exportToCsv(): void {
+  exportToPdf(): void {
+    if (!this.sonuc?.taksitDetaylari || this.sonuc.taksitDetaylari.length === 0) {
+      alert('Dışa aktarılacak veri bulunamadı.');
+      return;
+    }
 
+    (pdfMake as any).vfs = pdfFonts.vfs;
+
+    const tableRows = this.sonuc.taksitDetaylari.map((detay, index) => {
+      const atlandiMi = this.istek.aylikVeriler[detay.ay - 1].atlandiMi;
+      const araOdeme = this.istek.aylikVeriler[detay.ay - 1].araOdeme || 0;
+
+      return [
+        { text: (index + 1).toString(), alignment: 'center' },
+        { text: this.datePipe.transform(detay.odemeTarihi, 'dd.MM.yyyy'), alignment: 'center' },
+        { text: this.currencyPipe.transform(this.getTaksitTutari(index) + araOdeme, this.dovizCinsi, 'symbol-narrow', '1.2-2'), alignment: 'right' },
+        { text: atlandiMi ? 'Atlandı' : 'Ödenecek', alignment: 'center' }
+      ];
+    });
+
+    const documentDefinition: any = {
+      pageSize: 'A4',
+      pageOrientation: 'portrait',
+      pageMargins: [40, 40, 40, 60],
+      content: [
+        {
+          text: 'KREDİ ÖDEME PLANI',
+          style: 'header',
+          alignment: 'center'
+        },
+        {
+          canvas: [
+            {
+              type: 'line',
+              x1: 0,
+              y1: 5,
+              x2: 515,
+              y2: 5,
+              lineWidth: 1,
+              lineColor: '#FFBC14' // VakıfBank sarısı
+            }
+          ]
+        },
+        {
+          style: 'krediBilgileri',
+          stack: [
+            { text: `Kredi Türü: ${this.istek.krediTuru.toUpperCase()}` },
+            { text: `Kredi Tutarı: ${this.currencyPipe.transform(this.istek.tutar, this.dovizCinsi, 'symbol-narrow', '1.2-2')}` },
+            { text: `Vade: ${this.istek.vade} Ay` },
+            { text: `Aylık Faiz Oranı: %${this.istek.aylikOran}` },
+            { text: `Ödeme Sıklığı: ${this.istek.odemeSikligi === 'bir' ? 'Aylık' : 'Üç Aylık'}` }
+          ]
+        },
+        {
+          style: 'tablo',
+          table: {
+            headerRows: 1,
+            widths: ['auto', 'auto', '*', 'auto'],
+            body: [
+              [
+                { text: 'Taksit No', style: 'tableHeader', alignment: 'center' },
+                { text: 'Ödeme Tarihi', style: 'tableHeader', alignment: 'center' },
+                { text: 'Ödenecek Tutar', style: 'tableHeader', alignment: 'center' },
+                { text: 'Durum', style: 'tableHeader', alignment: 'center' }
+              ],
+              ...tableRows
+            ]
+          },
+          layout: {
+            fillColor: function (rowIndex: number) {
+              return rowIndex % 2 === 0 ? '#FFFFFF' : '#F5F5F5';
+            },
+            hLineWidth: function (i: number, node: any) {
+              return (i === 0 || i === node.table.body.length) ? 1 : 0.5;
+            },
+            vLineWidth: function (i: number, node: any) {
+              return 0.5;
+            },
+            hLineColor: function (i: number, node: any) {
+              return (i === 0 || i === node.table.body.length) ? '#FFBC14' : '#E5E5E5';
+            },
+            vLineColor: function (i: number, node: any) {
+              return '#E5E5E5';
+            }
+          }
+        },
+        {
+          style: 'ozet',
+          stack: [
+            { text: 'Özet Bilgiler:', style: 'ozetBaslik' },
+            { text: `Toplam Geri Ödeme: ${this.currencyPipe.transform(this.getToplamOdeme(), this.dovizCinsi, 'symbol-narrow', '1.2-2')}` }
+          ]
+        },
+        {
+          text: `Bu belge ${new Date().toLocaleDateString('tr-TR')} tarihinde oluşturulmuştur.`,
+          style: 'footer'
+        }
+      ],
+      styles: {
+        header: {
+          fontSize: 20,
+          bold: true,
+          color: '#003366',
+          margin: [0, 0, 0, 10]
+        },
+        krediBilgileri: {
+          fontSize: 12,
+          margin: [0, 20, 0, 20],
+          lineHeight: 1.5
+        },
+        tablo: {
+          margin: [0, 0, 0, 20]
+        },
+        tableHeader: {
+          bold: true,
+          fontSize: 11,
+          color: '#000000',
+          fillColor: '#FFBC14',
+          margin: [5, 5, 5, 5]
+        },
+        ozet: {
+          margin: [0, 20, 0, 20]
+        },
+        ozetBaslik: {
+          fontSize: 12,
+          bold: true,
+          color: '#003366',
+          margin: [0, 0, 0, 10]
+        },
+        footer: {
+          fontSize: 8,
+          color: '#808080',
+          alignment: 'right',
+          margin: [0, 20, 0, 0]
+        }
+      },
+      defaultStyle: {
+        font: 'Roboto'
+      }
+    };
+
+    pdfMake.createPdf(documentDefinition).download(`kredi-odeme-plani-${new Date().toISOString().split('T')[0]}.pdf`);
+  }
+
+  exportToCsv(): void {
     if (!this.sonuc?.taksitDetaylari || this.sonuc.taksitDetaylari.length === 0) {
       alert('Dışa aktarılacak veri bulunamadı.');
       return;

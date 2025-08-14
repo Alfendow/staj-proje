@@ -12,5 +12,6 @@ namespace stajapi.Models
         public decimal? KKDF { get; set; }
         public decimal? ToplamTaksit { get; set; }
         public decimal? AraOdeme { get; set; }
+        public decimal KalanAnapara { get; internal set; }
     }
 }

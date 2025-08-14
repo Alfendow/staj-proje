@@ -15,7 +15,7 @@ import { calisanGuard } from './guards/calisan.guards';
 export const routes: Routes = [
 
   { path: '', component: HomeComponent },
-  
+
   { path: 'login', component: LoginComponent },
   { path: 'admin-login', component: AdminLoginComponent },
   { path: 'register', component: RegisterComponent },

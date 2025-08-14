@@ -16,6 +16,27 @@ input[type=number] {
 
 
 
+.para-birimi-butonlar {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.para-birimi-butonlar button {
+  padding: 0.25rem 0.5rem;
+  border: 1px solid var(--gri-border);
+  background: var(--beyaz);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.para-birimi-butonlar button.active {
+  background: var(--vakifbank-sari);
+  border-color: var(--vakifbank-sari);
+  color: var(--siyah);
+}
+
 h2{
   color: var(--siyah);
   font-weight: 600;
@@ -24,7 +45,7 @@ h2{
 }
 
 
-.form-group input , 
+.form-group input ,
 .form-group select {
 
   outline: none;
@@ -71,7 +92,7 @@ h2{
 }
 
 
-.btn { 
+.btn {
   padding: 6px;
   font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   font-size: 16px;
