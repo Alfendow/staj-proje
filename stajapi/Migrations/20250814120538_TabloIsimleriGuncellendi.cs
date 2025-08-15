@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace stajapi.Migrations
 {
     /// <inheritdoc />
-    public partial class IlkKurulum : Migration
+    public partial class TabloIsimleriGuncellendi : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -16,7 +16,7 @@ namespace stajapi.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "adminler",
+                name: "calisan",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -35,12 +35,34 @@ namespace stajapi.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_adminler", x => x.Id);
+                    table.PrimaryKey("PK_calisan", x => x.Id);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "musteriler",
+                name: "faqs",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    Question = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Answer = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Category = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    OrderIndex = table.Column<int>(type: "int", nullable: false),
+                    IsActive = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    IsOpen = table.Column<bool>(type: "tinyint(1)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_faqs", x => x.Id);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "musteri",
                 columns: table => new
                 {
                     MusteriID = table.Column<int>(type: "int", nullable: false)
@@ -62,12 +84,12 @@ namespace stajapi.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_musteriler", x => x.MusteriID);
+                    table.PrimaryKey("PK_musteri", x => x.MusteriID);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "kayitli_krediler",
+                name: "kayitlikrediler",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -82,19 +104,19 @@ namespace stajapi.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_kayitli_krediler", x => x.Id);
+                    table.PrimaryKey("PK_kayitlikrediler", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_kayitli_krediler_musteriler_MusteriId",
+                        name: "FK_kayitlikrediler_musteri_MusteriId",
                         column: x => x.MusteriId,
-                        principalTable: "musteriler",
+                        principalTable: "musteri",
                         principalColumn: "MusteriID",
                         onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateIndex(
-                name: "IX_kayitli_krediler_MusteriId",
-                table: "kayitli_krediler",
+                name: "IX_kayitlikrediler_MusteriId",
+                table: "kayitlikrediler",
                 column: "MusteriId");
         }
 
@@ -102,13 +124,16 @@ namespace stajapi.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "adminler");
+                name: "calisan");
 
             migrationBuilder.DropTable(
-                name: "kayitli_krediler");
+                name: "faqs");
 
             migrationBuilder.DropTable(
-                name: "musteriler");
+                name: "kayitlikrediler");
+
+            migrationBuilder.DropTable(
+                name: "musteri");
         }
     }
 }

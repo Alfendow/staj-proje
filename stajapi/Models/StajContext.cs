@@ -9,14 +9,12 @@ namespace stajapi.Models
         public DbSet<Musteri> Musteriler { get; set; }
         public DbSet<Calisan> Calisanlar { get; set; }
         public DbSet<KayitliKredi> KayitliKrediler { get; set; }
-        public DbSet<FAQ> FAQs { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Musteri>().ToTable("musteriler");
-            modelBuilder.Entity<Calisan>().ToTable("calisanlar");
-            modelBuilder.Entity<KayitliKredi>().ToTable("kayitli_krediler");
-            modelBuilder.Entity<FAQ>().ToTable("faqs");
+            modelBuilder.Entity<Musteri>().ToTable("musteri");
+            modelBuilder.Entity<Calisan>().ToTable("calisan");
+            modelBuilder.Entity<KayitliKredi>().ToTable("kayitlikredi");
         }
     }
 }

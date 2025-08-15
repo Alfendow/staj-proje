@@ -12,8 +12,8 @@ using stajapi.Models;
 namespace stajapi.Migrations
 {
     [DbContext(typeof(StajContext))]
-    [Migration("20250724141921_IlkKurulum")]
-    partial class IlkKurulum
+    [Migration("20250814120538_TabloIsimleriGuncellendi")]
+    partial class TabloIsimleriGuncellendi
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -54,7 +54,7 @@ namespace stajapi.Migrations
 
                     b.HasIndex("MusteriId");
 
-                    b.ToTable("kayitli_krediler", (string)null);
+                    b.ToTable("kayitlikrediler", (string)null);
                 });
 
             modelBuilder.Entity("stajapi.Models.Calisan", b =>
@@ -90,7 +90,41 @@ namespace stajapi.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("adminler", (string)null);
+                    b.ToTable("calisan", (string)null);
+                });
+
+            modelBuilder.Entity("stajapi.Models.FAQ", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Answer")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Category")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<bool>("IsOpen")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<int>("OrderIndex")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Question")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("faqs", (string)null);
                 });
 
             modelBuilder.Entity("stajapi.Models.Musteri", b =>
@@ -131,7 +165,7 @@ namespace stajapi.Migrations
 
                     b.HasKey("MusteriID");
 
-                    b.ToTable("musteriler", (string)null);
+                    b.ToTable("musteri", (string)null);
                 });
 
             modelBuilder.Entity("KayitliKredi", b =>

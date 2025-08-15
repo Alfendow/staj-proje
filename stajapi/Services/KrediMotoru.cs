@@ -156,9 +156,9 @@ public class KrediMotoru
         decimal guncelTaksit;
         decimal sabitTaksit = ayVerisi?.SabitTaksit.GetValueOrDefault() ?? 0;
 
-        if (sabitTaksit > 0) 
+        if (sabitTaksit > 0)
           guncelTaksit = sabitTaksit;
-        else 
+        else
           guncelTaksit = ArtisliTaksitiHesapla(parametreler.AnaTaksit, bitisAyi, parametreler.Istek.AylikVeriler);
 
         detay.Anapara = Math.Round(guncelTaksit - toplamFaizVeVergiler, 2);

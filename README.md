@@ -4,17 +4,22 @@ Bu proje, bir kredi hesaplama ve başvuru sistemi uygulamasıdır. Frontend tara
 
 
 ## Ekran Görüntüleri                                                                                                     
-                                                                                                                          
-[Admin Login](screenshots/AdminLogin.png)                                                                               
-*Admin Login Sayfası*                                                                                                                                                                                                                              │
-![Müşteri Login](screenshots/MusteriLogin.png)                                                                           
-*Müşteri Login Sayfası*                                                                                                  
-                                                                                                                          
-![Register](screenshots/Register.png)                                                                                    
+
+
+*Anasayfa*
+![Anasayfa](screenshots/Anasayfa.png)                                                                                    
+
+
 *Üye Ol Sayfası*                                                                                                         
-                                                                                                                          
- ![Anasayfa](screenshots/Anasayfa.png)                                                                                    
-*Anasayfa*                                                                                                               
+![Register](screenshots/Register.png)                                                                                    
+
+
+*Müşteri Login Sayfası*                                                                                                  
+![Müşteri Login](screenshots/MusteriLogin.png)                                                                           
+
+
+*Admin Login Sayfası*                                                                                                                                                                                                                              │
+![Admin Login](screenshots/AdminLogin.png)                                                                               
 
 
 ## Proje Yapısı
